@@ -1,0 +1,18 @@
+<div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300 border border-gray-100">
+  <div class="p-6">
+    <div class="flex justify-between items-start">
+      <h3 class="text-xl font-semibold text-gray-900"><%= service.title %></h3>
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+        <%= service.modality.humanize %>
+      </span>
+    </div>
+    <p class="mt-2 text-gray-600 text-sm line-clamp-3"><%= service.description %></p>
+    <div class="mt-4 flex items-center justify-between">
+      <div class="text-lg font-bold text-blue-600">
+        <%= number_to_currency(service.price_cents / 100.0) %>/h
+      </div>
+      <%= link_to "Ver detalle", service_path(service),
+          class: "text-sm font-medium text-blue-600 hover:text-blue-500", data: { turbo: false } %>
+    </div>
+  </div>
+</div>

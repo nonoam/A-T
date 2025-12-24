@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>A&N | Plataforma de Tutorías</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    
+    <script src="https://cdn.tailwindcss.com"></script> </head>
+
+  <body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-900">
+    
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          
+          <div class="flex">
+            <div class="flex-shrink-0 flex items-center">
+              <%= link_to root_path, class: "flex items-center" do %>
+                <span class="text-2xl font-extrabold text-blue-600 tracking-tighter">A&N</span>
+              <% end %>
+            </div>
+
+            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+              <%= link_to "Explorar Clases", root_path, class: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" %>
+
+              <% if user_signed_in? %>
+                <% if current_user.student? %>
+                  <%= link_to "Mis Reservas", bookings_path, class: "border-transparent text-gray-500 hover:border-blue-500 hover:text-blue-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" %>
+                <% end %>
+
+                <% if current_user.teacher? %>
+                  <%= link_to "Gestionar mis Clases", services_path, class: "border-transparent text-gray-500 hover:border-blue-500 hover:text-blue-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" %>
+                  <% end %>
+
+                <% if current_user.admin? %>
+                  <%= link_to "Panel Admin", admin_dashboard_index_path, class: "border-transparent text-red-500 hover:border-red-700 hover:text-red-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-bold" %>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="hidden sm:ml-6 sm:flex sm:items-center">
+            <% if user_signed_in? %>
+              <div class="ml-3 relative flex items-center space-x-4">
+                <span class="text-sm text-gray-600">
+                  Hola, <span class="font-semibold"><%= current_user.first_name %></span> 
+                  <span class="text-xs bg-gray-100 px-2 py-0.5 rounded-full text-gray-500 border ml-1"><%= current_user.role.humanize %></span>
+                </span>
+                
+                <%= link_to "Editar Perfil", edit_user_registration_path, class: "text-sm text-gray-500 hover:text-gray-900" %>
+                
+                <%= button_to "Cerrar Sesión", destroy_user_session_path, method: :delete, class: "bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-md text-sm font-medium transition" %>
+              </div>
+            <% else %>
+              <div class="flex space-x-4">
+                <%= link_to "Iniciar Sesión", new_user_session_path, class: "text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium" %>
+                <%= link_to "Registrarse", new_user_registration_path, class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium shadow-sm transition" %>
+              </div>
+            <% end %>
+          </div>
+          
+          <div class="-mr-2 flex items-center sm:hidden">
+            <button type="button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <span class="sr-only">Abrir menú</span>
+              <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 w-full">
+      <% if notice %>
+        <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-4 rounded shadow-sm animate-fade-in-down" role="alert">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-green-700"><%= notice %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <% if alert %>
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded shadow-sm animate-fade-in-down" role="alert">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-red-700"><%= alert %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <main class="flex-grow">
+      <%= yield %>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-12">
+      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <p class="text-center text-gray-400 text-sm">
+          &copy; <%= Time.current.year %> A&N Platform. Arquitectura Ruby on Rails 7.
+        </p>
+      </div>
+    </footer>
+
+  </body>
+</html>
